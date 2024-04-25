@@ -9,14 +9,15 @@ const db = mysql.createConnection(
   },
   console.log(`Connected to the company_db database.`)
 );
-const makeMyList = () => {
+
+const myFn = async () => {
   const thisList = new GetList("SELECT * FROM department");
-  const myList = () => thisList.createDepartmentList(db);
-  myList();
+  await thisList.createDepartmentList(db);
+
+  console.log(thisList.data);
 };
 
-makeMyList();
-
+myFn();
 // const getIt = async () => {
 //   try {
 //     const myArray = await makeMyList();
