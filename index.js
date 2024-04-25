@@ -78,6 +78,12 @@ const userInput = inquirer
         });
     } else if (action === "Add A Role") {
       table = "role";
+      const deptList = async () => {
+        const thisList = new GetList("SELECT * FROM department");
+        await thisList.createDepartmentList(db);
+
+        return thisList.data;
+      };
       inquirer
         .prompt([
           {
@@ -89,33 +95,9 @@ const userInput = inquirer
             type: "list",
             name: "department",
             message: "What department does this role belong to?",
-            choices: [
-              "Human Resources",
-              "Design",
-              "Back-End",
-              "Front-End",
-              "Management",
-              "Maintenance",
-            ],
-            filter: (input) => {
-              return new Promise((resolve, reject) => {
-                if (input === "Human Resources") {
-                  resolve(1);
-                } else if (input === "Design") {
-                  resolve(2);
-                } else if (input === "Back-End") {
-                  resolve(3);
-                } else if (input === "Front-End") {
-                  resolve(4);
-                } else if (input === "Management") {
-                  resolve(5);
-                } else if (input === "Maintenance") {
-                  resolve(6);
-                } else {
-                  reject(new Error("Something has gone wrong..."));
-                }
-              });
-            },
+            // I used Xpert Learning Assistant to help me to understand the difference between passing a function reference and passing a function with ().
+            // Passing a function reference ensures that the function is not executed prematurely, but when it is needed in the order of the prompts.
+            choices: deptList,
           },
           {
             type: "number",
