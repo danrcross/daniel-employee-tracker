@@ -28,7 +28,7 @@ const userInput = inquirer
         "View All Employees",
         "Add A Department",
         "Add A Role",
-        // "Add An Employee",
+        "Add An Employee",
         // "Update An Employee Role",
       ],
     },
@@ -69,12 +69,12 @@ const userInput = inquirer
           const deptName = `('${res.department}')`;
           myQuery = new QueryMaker(table, "(name)", deptName).addItem();
           db.then((conn) => conn.query(myQuery));
-          db.then((data) => data.query(`SELECT * FROM department`)).then(
-            ([rows, field]) => {
-              console.log("Departments updated!");
-              console.table(rows);
-            }
-          );
+          db.then((data) =>
+            data.query(`SELECT * FROM department ORDER BY id DESC LIMIT 1`)
+          ).then(([rows, field]) => {
+            console.log("Departments updated!");
+            console.table(rows);
+          });
         });
     } else if (action === "Add A Role") {
       table = "role";
@@ -103,6 +103,7 @@ const userInput = inquirer
             type: "number",
             name: "salary",
             message: "What is the salary of this role?",
+            // NEED TO WORK THIS OUT!! DECIMAL CHECKER!!
             filter: (input) => {
               return new Promise((resolve, reject) => {
                 const lengthCheck = input.toString();
@@ -120,15 +121,29 @@ const userInput = inquirer
           const values = `('${res.title}','${res.salary}','${res.department}')`;
           myQuery = new QueryMaker(table, columns, values).addItem();
           db.then((conn) => conn.query(myQuery));
-          db.then((data) => data.query(`SELECT * FROM role`)).then(
-            ([rows, field]) => {
-              console.log("Roles updated!");
-              console.table(rows);
-            }
-          );
+          //be more selective with table output
+          db.then((data) =>
+            data.query(`SELECT * FROM role ORDER BY id DESC LIMIT 1`)
+          ).then(([rows, field]) => {
+            console.log("Role added!");
+            console.table(rows);
+          });
         });
     } else if (action === "Add An Employee") {
       table = "employee";
+      const roleList = async () => {
+        const thisList = new GetList("SELECT title, id FROM role");
+        await thisList.createRoleList(db);
+
+        return thisList.data;
+      };
+      const managerList = async () => {
+        const thisList = new GetList();
+        await thisList.createManagerList(db);
+
+        return thisList.data;
+      };
+
       inquirer
         .prompt([
           {
@@ -142,34 +157,33 @@ const userInput = inquirer
             message: "What is the employee's last name?",
           },
           {
-            type: "number",
-            name: "salary",
-            message: "What is the salary of this role?",
-            filter: (input) => {
-              return new Promise((resolve, reject) => {
-                const lengthCheck = input.toString();
-                if (lengthCheck.length <= 8) {
-                  resolve(input);
-                } else {
-                  reject(new Error("Salary must be 8 digits or less"));
-                }
-              });
-            },
+            type: "list",
+            name: "role_id",
+            message: "What is the employee's role?",
+            choices: roleList,
+          },
+          {
+            type: "list",
+            name: "manager_id",
+            message: "What is the employee's manager's name?",
+            choices: managerList,
           },
         ])
         .then((res) => {
-          const columns = `(title, salary, department_id)`;
-          const values = `('${res.title}','${res.salary}','${res.department}')`;
+          const columns = `(first_name, last_name, role_id, manager_id)`;
+          const values = `('${res.first_name}','${res.last_name}','${res.role_id}', '${res.manager_id}')`;
           myQuery = new QueryMaker(table, columns, values).addItem();
           db.then((conn) => conn.query(myQuery));
-          db.then((data) => data.query(`SELECT * FROM role`)).then(
-            ([rows, field]) => {
-              console.log("Roles updated!");
-              console.table(rows);
-            }
-          );
+          db.then((data) =>
+            // Query to show the most recent (last) entry in table:
+            // Takes the table, orders it in descending order by id, and then limits table to 1 entry
+            data.query(`SELECT * FROM employee ORDER BY id DESC LIMIT 1`)
+          ).then(([rows, field]) => {
+            console.log("Employee added!");
+            console.table(rows);
+          });
         });
     }
-    // } else if (action === "View All Departments") {
+    // } else if (action === "Update Employee Role") {
     // }
   });
