@@ -63,6 +63,25 @@ class GetList {
       });
     this.data = managers;
   }
+
+  async createEmployeeList(db) {
+    let employees = [];
+    await db
+      .then((conn) =>
+        conn.query(
+          "SELECT e.id, e.first_name, e.last_name, r.title FROM employee e JOIN role r ON e.role_id= r.id"
+        )
+      )
+      .then(([rows, fields]) => {
+        employees = rows.map((item) => {
+          return {
+            name: item.first_name + " " + item.last_name + ": " + item.title,
+            value: item.id,
+          };
+        });
+      });
+    this.data = employees;
+  }
 }
 
 module.exports = GetList;
