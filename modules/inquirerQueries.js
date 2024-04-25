@@ -12,41 +12,43 @@ const db = mysql.createConnection(
   console.log(`Connected to the company_db database.`)
 );
 
-const viewDept = () => {
+const viewDept = async () => {
   table = "department";
   myQuery = new QueryMaker(table).viewAll();
-  db.then((conn) => conn.query(myQuery)).then(([rows, fields]) =>
-    console.table(rows)
-  );
+  await db
+    .then((conn) => conn.query(myQuery))
+    .then(([rows, fields]) => console.table(rows));
 };
 
-const viewRole = () => {
+const viewRole = async () => {
   table = "role";
   myQuery = new QueryMaker(table).viewAll();
-  db.then((conn) => conn.query(myQuery)).then(([rows, fields]) =>
-    console.table(rows)
-  );
+  await db
+    .then((conn) => conn.query(myQuery))
+    .then(([rows, fields]) => console.table(rows));
 };
 
-const viewEmployee = () => {
+const viewEmployee = async () => {
   table = "employee";
   myQuery = new QueryMaker(table).viewAll();
-  db.then((conn) => conn.query(myQuery)).then(([rows, fields]) =>
-    console.table(rows)
-  );
+  await db
+    .then((conn) => conn.query(myQuery))
+    .then(([rows, fields]) => console.table(rows));
 };
 
-const addDepartment = (res) => {
+const addDepartment = async (res) => {
   table = "department";
   const deptName = `('${res.department}')`;
   myQuery = new QueryMaker(table, "(name)", deptName).addItem();
-  db.then((conn) => conn.query(myQuery));
-  db.then((data) =>
-    data.query(`SELECT * FROM department ORDER BY id DESC LIMIT 1`)
-  ).then(([rows, field]) => {
-    console.log("Departments updated!");
-    console.table(rows);
-  });
+  await db.then((conn) => conn.query(myQuery));
+  await db
+    .then((data) =>
+      data.query(`SELECT * FROM department ORDER BY id DESC LIMIT 1`)
+    )
+    .then(([rows, field]) => {
+      console.log("Departments updated!");
+      console.table(rows);
+    });
 };
 
 const deptList = async () => {
