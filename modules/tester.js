@@ -11,8 +11,8 @@ const db = mysql.createConnection(
 );
 
 const myFn = async () => {
-  const thisList = new GetList("SELECT * FROM department");
-  await thisList.createDepartmentList(db);
+  const thisList = new GetList();
+  await thisList.createManagerList(db);
 
   console.log(thisList.data);
 };
