@@ -1,4 +1,13 @@
 const inquirer = require("inquirer");
+const Queries = require("./modules/inquirerQueries");
+const {
+  introQ,
+  addDeptQ,
+  addRoleQ,
+  addEmployeeQ,
+  updateEmpQ,
+} = require("./modules/inquirerPrompts");
+
 const {
   viewDept,
   viewRole,
@@ -7,14 +16,7 @@ const {
   addRole,
   addEmployee,
   updateEmployeeRole,
-} = require("./modules/inquirerQueries");
-const {
-  introQ,
-  addDeptQ,
-  addRoleQ,
-  addEmployeeQ,
-  updateEmpQ,
-} = require("./modules/inquirerPrompts");
+} = new Queries();
 
 // Syntax below comes from documentation on 'Basic Promise' for mysql2: https://sidorares.github.io/node-mysql2/docs/documentation/promise-wrapper
 
@@ -31,20 +33,20 @@ const myInquirer = () => {
       } else if (action === "View All Employees") {
         await viewEmployee();
       } else if (action === "Add A Department") {
-        await inquirer.prompt(addDeptQ).then((res) => {
-          addDepartment(res);
+        await inquirer.prompt(addDeptQ).then(async (res) => {
+          await addDepartment(res);
         });
       } else if (action === "Add A Role") {
-        await inquirer.prompt(addRoleQ).then((res) => {
-          addRole(res);
+        await inquirer.prompt(addRoleQ).then(async (res) => {
+          await addRole(res);
         });
       } else if (action === "Add An Employee") {
-        await inquirer.prompt(addEmployeeQ).then((res) => {
-          addEmployee(res);
+        await inquirer.prompt(addEmployeeQ).then(async (res) => {
+          await addEmployee(res);
         });
       } else if (action === "Update An Employee Role") {
-        await inquirer.prompt(updateEmpQ).then((res) => {
-          updateEmployeeRole(res);
+        await inquirer.prompt(updateEmpQ).then(async (res) => {
+          await updateEmployeeRole(res);
         });
       }
     };

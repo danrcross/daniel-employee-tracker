@@ -1,10 +1,6 @@
-const {
-  deptList,
-  salaryChecker,
-  managerList,
-  employeeList,
-  roleList,
-} = require("./inquirerQueries");
+const Queries = require("./inquirerQueries");
+const { deptList, salaryChecker, managerList, employeeList, roleList } =
+  new Queries();
 
 const introQ = [
   {
