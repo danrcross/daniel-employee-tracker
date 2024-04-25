@@ -13,7 +13,7 @@ class QueryMaker {
     return `INSERT INTO ${this.table} ${this.columns} VALUES ${this.values}`;
   }
   updateEmpRole() {
-    return `UPDATE TABLE employee SET role_id=${this.role} WHERE id=${this.empId}`;
+    return `UPDATE employee SET role_id=${this.role} WHERE id=${this.empId}`;
   }
 }
 
