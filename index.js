@@ -10,6 +10,10 @@ const {
   updateEmpManagerQ,
   whichManQ,
   whichDepQ,
+  deleteWhat,
+  deleteDeptQ,
+  deleteRoleQ,
+  deleteEmployeeQ,
 } = require("./modules/inquirerPrompts");
 
 // Destructures methods from Queries module to be used by app
@@ -24,6 +28,9 @@ const {
   addEmployee,
   updateEmployeeRole,
   updateEmployeeManager,
+  deleteDepartment,
+  deleteRole,
+  deleteEmployee,
   endConnection,
 } = new Queries();
 
@@ -70,6 +77,25 @@ const myInquirer = () => {
       } else if (action === "Update An Employee's Manager") {
         await inquirer.prompt(updateEmpManagerQ).then(async (res) => {
           await updateEmployeeManager(res);
+        });
+      } else if (action === "Delete A Department, Role, Or Employee") {
+        await inquirer.prompt(deleteWhat).then(async (res) => {
+          console.log(res);
+          if (res.table === "department") {
+            await inquirer.prompt(deleteDeptQ).then(async (res) => {
+              await deleteDepartment(res);
+            });
+          }
+          if (res.table === "role") {
+            await inquirer.prompt(deleteRoleQ).then(async (res) => {
+              await deleteRole(res);
+            });
+          }
+          if (res.table === "employee") {
+            await inquirer.prompt(deleteEmployeeQ).then(async (res) => {
+              await deleteEmployee(res);
+            });
+          }
         });
       } else if (action === "Quit Application") {
         await endConnection();

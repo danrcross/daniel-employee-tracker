@@ -28,6 +28,9 @@ class QueryMaker {
   updateEmpManager() {
     return `UPDATE employee SET manager_id=${this.managerId} WHERE id=${this.empId}`;
   }
+  deleteRow() {
+    return `DELETE FROM ${this.table} WHERE id=${this.values}`;
+  }
 }
 
 // Exports 'QueryMaker' class to be used elsewhere

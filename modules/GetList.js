@@ -118,6 +118,21 @@ class GetList {
       });
     this.data = employees;
   }
+  async createTableList(db) {
+    let tables = [];
+    await db
+      .then((conn) => conn.query("SHOW TABLES"))
+      .then(([rows, fields]) => {
+        tables = rows.map((item) => {
+          // Will format the resulting table as a list items like : "First Last: Role"
+          return {
+            name: item.Tables_in_company_db,
+            value: item.Tables_in_company_db,
+          };
+        });
+      });
+    this.data = tables;
+  }
 }
 
 // exports GetList class in order for its methods to be used by other scripts

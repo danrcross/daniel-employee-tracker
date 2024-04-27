@@ -7,6 +7,7 @@ const {
   employeeList,
   roleList,
   employeeMList,
+  tableList,
 } = new Queries();
 
 // Objects made of inquirer questions.
@@ -26,6 +27,7 @@ const introQ = [
       "Add An Employee",
       "Update An Employee Role",
       "Update An Employee's Manager",
+      "Delete A Department, Role, Or Employee",
       "Quit Application",
     ],
   },
@@ -142,6 +144,40 @@ const updateEmpManagerQ = [
   },
 ];
 
+const deleteWhat = [
+  {
+    type: "list",
+    name: "table",
+    message: "Which table would you like to delete an item from?",
+    choices: tableList,
+  },
+];
+
+const deleteDeptQ = [
+  {
+    type: "list",
+    name: "department",
+    message: "Which department would you like to delete?",
+    choices: deptList,
+  },
+];
+const deleteRoleQ = [
+  {
+    type: "list",
+    name: "role",
+    message: "Which role would you like to delete?",
+    choices: roleList,
+  },
+];
+const deleteEmployeeQ = [
+  {
+    type: "list",
+    name: "employee",
+    message: "Which employee would you like to delete?",
+    choices: employeeList,
+  },
+];
+
 // Exports questions to be used by application (index.js)
 module.exports = {
   introQ,
@@ -152,4 +188,8 @@ module.exports = {
   updateEmpManagerQ,
   whichManQ,
   whichDepQ,
+  deleteWhat,
+  deleteDeptQ,
+  deleteRoleQ,
+  deleteEmployeeQ,
 };

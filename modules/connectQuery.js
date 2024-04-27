@@ -244,7 +244,51 @@ class Queries {
     return thisList.data;
   }
 
-  async;
+  async tableList() {
+    const thisList = new GetList();
+    await thisList.createTableList(db);
+    return thisList.data;
+  }
+
+  async deleteDepartment(res) {
+    const table = "department";
+    const id = `${res.department}`;
+    const myQuery = new QueryMaker(table, undefined, id).deleteRow();
+    await db.then((conn) => conn.query(myQuery));
+    //be more selective with table output
+    await db
+      .then((data) => data.query(`SELECT * FROM department`))
+      .then(([rows, field]) => {
+        console.log("Department deleted!");
+        console.table(rows);
+      });
+  }
+  async deleteRole(res) {
+    const table = "role";
+    const id = `${res.role}`;
+    const myQuery = new QueryMaker(table, undefined, id).deleteRow();
+    await db.then((conn) => conn.query(myQuery));
+    //be more selective with table output
+    await db
+      .then((data) => data.query(`SELECT * FROM role`))
+      .then(([rows, field]) => {
+        console.log("Role deleted!");
+        console.table(rows);
+      });
+  }
+  async deleteEmployee(res) {
+    const table = "employee";
+    const id = `${res.employee}`;
+    const myQuery = new QueryMaker(table, undefined, id).deleteRow();
+    await db.then((conn) => conn.query(myQuery));
+    //be more selective with table output
+    await db
+      .then((data) => data.query(`SELECT * FROM employee`))
+      .then(([rows, field]) => {
+        console.log("Employee deleted!");
+        console.table(rows);
+      });
+  }
   // simply ends connection to database
   async endConnection() {
     await db.then((conn) => conn.end());
