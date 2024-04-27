@@ -12,6 +12,9 @@ class QueryMaker {
   viewAll() {
     return `SELECT * FROM ${this.table}`;
   }
+  viewEmpByM() {
+    return `SELECT * FROM employee WHERE manager_id=${this.managerId}`;
+  }
   addItem() {
     return `INSERT INTO ${this.table} ${this.columns} VALUES ${this.values}`;
   }
