@@ -21,7 +21,7 @@ VALUES
     ('Hiring Manager', 65000.50, 1),
     ('Senior Designer', 120000.75, 2),
     ('Junior Designer', 70000.75, 2),
-    ('Senior Back-End Developer', 14500.50, 3),
+    ('Senior Back-End Developer', 145000.50, 3),
     ('Junior Back-End Developer', 85000.50, 3),
     ('Senior Front-End Developer', 14500.50, 4),
     ('Junior Front-End Developer', 85000.50, 4),

@@ -1,7 +1,14 @@
 // Import 'Queries' module; create new instance of class and destructure its methods for use in script
 const Queries = require("./connectQuery");
-const { deptList, salaryChecker, managerList, employeeList, roleList } =
-  new Queries();
+const {
+  deptList,
+  salaryChecker,
+  managerList,
+  employeeList,
+  roleList,
+  employeeMList,
+  tableList,
+} = new Queries();
 
 // Objects made of inquirer questions.
 const introQ = [
@@ -13,15 +20,36 @@ const introQ = [
       "View All Departments",
       "View All Roles",
       "View All Employees",
+      "View Employees By Manager",
+      "View Employees By Department",
+      "View Utilized Budget By Department",
       "Add A Department",
       "Add A Role",
       "Add An Employee",
       "Update An Employee Role",
+      "Update An Employee's Manager",
+      "Delete A Department, Role, Or Employee",
       "Quit Application",
     ],
   },
 ];
 
+const whichManQ = [
+  {
+    type: "list",
+    name: "manager",
+    message: "Which manager's employees would you like to view?",
+    choices: managerList,
+  },
+];
+const whichDepQ = [
+  {
+    type: "list",
+    name: "department",
+    message: "Which department's employees would you like to view?",
+    choices: deptList,
+  },
+];
 const addDeptQ = [
   {
     type: "text",
@@ -86,7 +114,7 @@ const updateEmpQ = [
   {
     type: "list",
     name: "employee",
-    message: "Whose role would you like to update?",
+    message: "Whose role would you like to update?\n EMPLOYEE: CURRENT ROLE",
     // Same as deptList (above)
     choices: employeeList,
   },
@@ -99,5 +127,80 @@ const updateEmpQ = [
   },
 ];
 
+const updateEmpManagerQ = [
+  {
+    type: "list",
+    name: "employee",
+    message:
+      "Whose manager would you like to update?\n EMPLOYEE: CURRENT MANAGER",
+    // Same as deptList (above)
+    choices: employeeMList,
+  },
+  {
+    type: "list",
+    name: "manager",
+    message: "Which manager would you like to assign to this employee?",
+    // Same as deptList (above)
+    choices: managerList,
+  },
+];
+
+const deleteWhat = [
+  {
+    type: "list",
+    name: "table",
+    message: "Which table would you like to delete an item from?",
+    choices: tableList,
+  },
+];
+
+const deleteDeptQ = [
+  {
+    type: "list",
+    name: "department",
+    message: "Which department would you like to delete?",
+    choices: deptList,
+  },
+];
+const deleteRoleQ = [
+  {
+    type: "list",
+    name: "role",
+    message: "Which role would you like to delete?",
+    choices: roleList,
+  },
+];
+const deleteEmployeeQ = [
+  {
+    type: "list",
+    name: "employee",
+    message: "Which employee would you like to delete?",
+    choices: employeeList,
+  },
+];
+
+const whichBudget = [
+  {
+    type: "list",
+    name: "department",
+    message: "Which department's budget would you like to view?",
+    choices: deptList,
+  },
+];
+
 // Exports questions to be used by application (index.js)
-module.exports = { introQ, addDeptQ, addRoleQ, addEmployeeQ, updateEmpQ };
+module.exports = {
+  introQ,
+  addDeptQ,
+  addRoleQ,
+  addEmployeeQ,
+  updateEmpQ,
+  updateEmpManagerQ,
+  whichManQ,
+  whichDepQ,
+  deleteWhat,
+  deleteDeptQ,
+  deleteRoleQ,
+  deleteEmployeeQ,
+  whichBudget,
+};

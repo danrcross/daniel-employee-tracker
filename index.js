@@ -7,6 +7,14 @@ const {
   addRoleQ,
   addEmployeeQ,
   updateEmpQ,
+  updateEmpManagerQ,
+  whichManQ,
+  whichDepQ,
+  deleteWhat,
+  deleteDeptQ,
+  deleteRoleQ,
+  deleteEmployeeQ,
+  whichBudget,
 } = require("./modules/inquirerPrompts");
 
 // Destructures methods from Queries module to be used by app
@@ -14,10 +22,17 @@ const {
   viewDept,
   viewRole,
   viewEmployee,
+  viewEmployeeByM,
+  viewEmployeeByD,
+  viewBudgetByD,
   addDepartment,
   addRole,
   addEmployee,
   updateEmployeeRole,
+  updateEmployeeManager,
+  deleteDepartment,
+  deleteRole,
+  deleteEmployee,
   endConnection,
 } = new Queries();
 
@@ -37,6 +52,18 @@ const myInquirer = () => {
         await viewRole();
       } else if (action === "View All Employees") {
         await viewEmployee();
+      } else if (action === "View Employees By Manager") {
+        await inquirer.prompt(whichManQ).then(async (res) => {
+          await viewEmployeeByM(res);
+        });
+      } else if (action === "View Employees By Department") {
+        await inquirer.prompt(whichDepQ).then(async (res) => {
+          await viewEmployeeByD(res);
+        });
+      } else if (action === "View Utilized Budget By Department") {
+        await inquirer.prompt(whichBudget).then(async (res) => {
+          await viewBudgetByD(res);
+        });
       } else if (action === "Add A Department") {
         await inquirer.prompt(addDeptQ).then(async (res) => {
           await addDepartment(res);
@@ -52,6 +79,28 @@ const myInquirer = () => {
       } else if (action === "Update An Employee Role") {
         await inquirer.prompt(updateEmpQ).then(async (res) => {
           await updateEmployeeRole(res);
+        });
+      } else if (action === "Update An Employee's Manager") {
+        await inquirer.prompt(updateEmpManagerQ).then(async (res) => {
+          await updateEmployeeManager(res);
+        });
+      } else if (action === "Delete A Department, Role, Or Employee") {
+        await inquirer.prompt(deleteWhat).then(async (res) => {
+          if (res.table === "department") {
+            await inquirer.prompt(deleteDeptQ).then(async (res) => {
+              await deleteDepartment(res);
+            });
+          }
+          if (res.table === "role") {
+            await inquirer.prompt(deleteRoleQ).then(async (res) => {
+              await deleteRole(res);
+            });
+          }
+          if (res.table === "employee") {
+            await inquirer.prompt(deleteEmployeeQ).then(async (res) => {
+              await deleteEmployee(res);
+            });
+          }
         });
       } else if (action === "Quit Application") {
         await endConnection();

@@ -45,6 +45,50 @@ class Queries {
       .then(([rows, fields]) => console.table(rows));
   }
 
+  async viewEmployeeByM(res) {
+    const myQuery = new QueryMaker(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      res.manager
+    ).viewEmpByM();
+    await db
+      .then((conn) => conn.query(myQuery))
+      .then(([rows, fields]) => console.table(rows));
+  }
+
+  async viewEmployeeByD(res) {
+    const myQuery = new QueryMaker(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      res.department
+    ).viewEmpByD();
+    await db
+      .then((conn) => conn.query(myQuery))
+      .then(([rows, fields]) => console.table(rows));
+  }
+
+  async viewBudgetByD(res) {
+    const myQuery = new QueryMaker(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      res.department
+    ).viewBudgetByD();
+    await db
+      .then((conn) => conn.query(myQuery))
+      .then(([rows, fields]) => console.table(rows));
+  }
+
   // Adds department to 'department' table; 'res' parameter will take in user inquirer response as argument
   // Similar to above fn's, uses QueryMaker to produce query, then sends query to database(adds department).
   // Also gives new table item as feedback
@@ -183,6 +227,83 @@ class Queries {
       });
   }
 
+  // Same as above
+  async updateEmployeeManager(res) {
+    const table = "employee";
+    const managerId = `${res.manager}`;
+    const empId = `${res.employee}`;
+    const myQuery = new QueryMaker(
+      table,
+      undefined,
+      undefined,
+      undefined,
+      empId,
+      managerId
+    ).updateEmpManager();
+    await db.then((conn) => conn.query(myQuery));
+    await db
+      .then((data) =>
+        // Query to show the updated entry
+        data.query(
+          `SELECT e1.id, e1.first_name, e1.last_name, e2.id AS 'manager id', e2.first_name AS 'manager_first', e2.last_name AS 'manager_last' FROM employee e1 JOIN employee e2 ON e1.manager_id=e2.id WHERE e1.id=${res.employee}`
+        )
+      )
+      .then(([rows, field]) => {
+        console.log("Employee manager updated!");
+        console.table(rows);
+      });
+  }
+  async employeeMList() {
+    const thisList = new GetList();
+    await thisList.createEmployeeMList(db);
+    return thisList.data;
+  }
+
+  async tableList() {
+    const thisList = new GetList();
+    await thisList.createTableList(db);
+    return thisList.data;
+  }
+
+  async deleteDepartment(res) {
+    const table = "department";
+    const id = `${res.department}`;
+    const myQuery = new QueryMaker(table, undefined, id).deleteRow();
+    await db.then((conn) => conn.query(myQuery));
+    //be more selective with table output
+    await db
+      .then((data) => data.query(`SELECT * FROM department`))
+      .then(([rows, field]) => {
+        console.log("Department deleted!");
+        console.table(rows);
+      });
+  }
+  async deleteRole(res) {
+    const table = "role";
+    const id = `${res.role}`;
+    const myQuery = new QueryMaker(table, undefined, id).deleteRow();
+    await db.then((conn) => conn.query(myQuery));
+    //be more selective with table output
+    await db
+      .then((data) => data.query(`SELECT * FROM role`))
+      .then(([rows, field]) => {
+        console.log("Role deleted!");
+        console.table(rows);
+      });
+  }
+  async deleteEmployee(res) {
+    const table = "employee";
+    const id = `${res.employee}`;
+    const myQuery = new QueryMaker(table, undefined, id).deleteRow();
+    await db.then((conn) => conn.query(myQuery));
+    //be more selective with table output
+    await db
+      .then((data) => data.query(`SELECT * FROM employee`))
+      .then(([rows, field]) => {
+        console.log("Employee deleted!");
+        console.table(rows);
+      });
+  }
   // simply ends connection to database
   async endConnection() {
     await db.then((conn) => conn.end());
