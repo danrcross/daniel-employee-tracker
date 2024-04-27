@@ -1,3 +1,5 @@
+// Class contains constructor that takes in arguments from any new instance of class
+// Also contains methods to create queries constructed with the arguments passed into class instance
 class QueryMaker {
   constructor(table, columns, values, role, empId) {
     this.table = table;
@@ -17,4 +19,5 @@ class QueryMaker {
   }
 }
 
+// Exports 'QueryMaker' class to be used elsewhere
 module.exports = QueryMaker;

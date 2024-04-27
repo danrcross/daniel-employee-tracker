@@ -1,3 +1,4 @@
+// Import 'mysql' npm package
 const mysql = require("mysql2/promise");
 
 // Got help from Xpert Learning Assistant to pass data from function into class property,
@@ -29,15 +30,14 @@ class GetList {
     // 'depts' array passed up to 'this.data'
     this.data = depts;
   }
+
+  // Works in very similar fashion to function above!
   async createRoleList(db) {
     let roles = [];
     await db
       .then((conn) => conn.query(this.query))
       .then(([rows, fields]) => {
         roles = rows.map((item) => {
-          // This post on stack exchange helped me to understand what kind of data inquirer was looking in the choices property.
-          // Inquirer got mad whenever I tried to use a function that would produce an array of strings. it wanted an array of key-value pairs, name and value.
-          // https://stackoverflow.com/questions/66626936/inquirer-js-populate-list-choices-from-sql-database
           return { name: item.title, value: item.id };
         });
       });
@@ -49,12 +49,16 @@ class GetList {
     let managers = [];
     await db
       .then((conn) =>
+        // Query joins employee table to itself at the match between manager id and employee id.
+        // Also selects DISTINCT matches, as there are many repetitions of the manager_id (there are only 2 managers)
+        // This will result in a small table showing the managers' first_name, last_name, and (employee) id.
         conn.query(
           "SELECT DISTINCT e2.first_name, e2.last_name, e2.id FROM employee e1 JOIN employee e2 ON e1.manager_id = e2.id;"
         )
       )
       .then(([rows, fields]) => {
         managers = rows.map((item) => {
+          // Will format the result from the table as list items like: "First Last: Id"
           return {
             name: item.first_name + " " + item.last_name,
             value: item.id,
@@ -64,16 +68,20 @@ class GetList {
     this.data = managers;
   }
 
+  // Also works in very similar fashion to the first and second functions.
   async createEmployeeList(db) {
     let employees = [];
     await db
       .then((conn) =>
+        // Query will join role table onto employee table where the role_id on employee table matches the id from role table
+        // Resulting table will display employee id, followed by first name, last name, and role title
         conn.query(
           "SELECT e.id, e.first_name, e.last_name, r.title FROM employee e JOIN role r ON e.role_id= r.id"
         )
       )
       .then(([rows, fields]) => {
         employees = rows.map((item) => {
+          // Will format the resulting table as a list items like : "First Last: Role"
           return {
             name: item.first_name + " " + item.last_name + ": " + item.title,
             value: item.id,
@@ -84,4 +92,5 @@ class GetList {
   }
 }
 
+// exports GetList class in order for its methods to be used by other scripts
 module.exports = GetList;

@@ -1,7 +1,9 @@
-const QueryMaker = require("./main-fns");
+// Import necessary modules
+const QueryMaker = require("./QueryMaker");
 const mysql = require("mysql2/promise");
 const GetList = require("./GetList");
 
+// Creates connection to mysql database titled 'company_db'
 const db = mysql.createConnection(
   {
     host: "localhost",
@@ -12,7 +14,11 @@ const db = mysql.createConnection(
   console.log(`Connected to the company_db database.`)
 );
 
+// A class that contains methods involving various MySQL queries that will need to be made by the app
+// Promise syntax used for mysql2 methods (below) comes from documentation on 'Basic Promise' for mysql2: https://sidorares.github.io/node-mysql2/docs/documentation/promise-wrapper
 class Queries {
+  // Async. fn that will show the department table.
+  // Uses QueryMaker module to produce correct query, then makes query to the database
   async viewDept() {
     const table = "department";
     const myQuery = new QueryMaker(table).viewAll();
@@ -21,6 +27,7 @@ class Queries {
       .then(([rows, fields]) => console.table(rows));
   }
 
+  // similar to above
   async viewRole() {
     const table = "role";
     const myQuery = new QueryMaker(table).viewAll();
@@ -29,6 +36,7 @@ class Queries {
       .then(([rows, fields]) => console.table(rows));
   }
 
+  // similar to above
   async viewEmployee() {
     const table = "employee";
     const myQuery = new QueryMaker(table).viewAll();
@@ -37,6 +45,9 @@ class Queries {
       .then(([rows, fields]) => console.table(rows));
   }
 
+  // Adds department to 'department' table; 'res' parameter will take in user inquirer response as argument
+  // Similar to above fn's, uses QueryMaker to produce query, then sends query to database(adds department).
+  // Also gives new table item as feedback
   async addDepartment(res) {
     const table = "department";
     const deptName = `('${res.department}')`;
@@ -52,12 +63,15 @@ class Queries {
       });
   }
 
+  // fn to produce an array-format list to be used by inquirer to produce a list of departments
+  // passes db connection to GetList.createDepartmentList(db) fn; fn parses the data pulled.
   async deptList() {
     const thisList = new GetList("SELECT * FROM department");
     await thisList.createDepartmentList(db);
     return thisList.data;
   }
 
+  // similar to addDepartment
   async addRole(res) {
     const table = "role";
     const columns = `(title, salary, department_id)`;
@@ -73,29 +87,51 @@ class Queries {
       });
   }
 
-  // Used my new async/await knowledge to convert recommended filter 'Promise' function:
+  // Used recommended filter 'Promise' function:
   // https://www.npmjs.com/package/inquirer/v/8.2.4
-  async salaryChecker(input) {
-    const lengthCheck = await input.toString();
-    if (lengthCheck.length <= 8) {
-      return input;
-    } else {
-      return console.error("Salary must be 8 digits or less");
-    }
+  salaryChecker(input) {
+    // Had to refresh on regex/ regex.prototype.test() method: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+    return new Promise((resolve, reject) => {
+      const regex = /^\d+(\.\d+)?$/;
+      const isNumber = regex.test(input);
+      if (isNumber) {
+        const decimalFormat = input.toFixed(2);
+        console.log(decimalFormat);
+        const lengthCheck = decimalFormat.toString();
+        if (lengthCheck.length <= 18) {
+          resolve(decimalFormat);
+        } else {
+          reject(
+            new Error(
+              "ERROR: Salary must adhere to following format: \n  1. No commas in number\n  2. May include 2 decimal places\n  3. Must be LESS THAN 21 digits WITH decimals OR LESS THAN 19 digits WITHOUT decimals\n"
+            )
+          );
+        }
+      } else {
+        reject(
+          new Error(
+            "NOT A NUMBER: Salary must adhere to following format: \n  1. No commas in number\n  2. May include 2 decimal places\n  3. Must be LESS THAN 21 digits WITH decimals OR LESS THAN 19 digits WITHOUT decimals\n"
+          )
+        );
+      }
+    });
   }
 
+  // similar to deptList
   async roleList() {
     const thisList = new GetList("SELECT title, id FROM role");
     await thisList.createRoleList(db);
     return thisList.data;
   }
 
+  // similar to above
   async managerList() {
     const thisList = new GetList();
     await thisList.createManagerList(db);
     return thisList.data;
   }
 
+  // similar to addDepartment
   async addEmployee(res) {
     const table = "employee";
     const columns = `(first_name, last_name, role_id, manager_id)`;
@@ -114,12 +150,14 @@ class Queries {
       });
   }
 
+  // similar to deptList
   async employeeList() {
     const thisList = new GetList();
     await thisList.createEmployeeList(db);
     return thisList.data;
   }
 
+  // similar in structure to the 'add...' functions, but uses an update query instead.
   async updateEmployeeRole(res) {
     const table = "employee";
     const role = `${res.role}`;
@@ -144,5 +182,12 @@ class Queries {
         console.table(rows);
       });
   }
+
+  // simply ends connection to database
+  async endConnection() {
+    await db.then((conn) => conn.end());
+  }
 }
+
+// Export 'Queries' class to be used by other scripts
 module.exports = Queries;
