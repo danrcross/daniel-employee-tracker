@@ -14,6 +14,7 @@ const {
   deleteDeptQ,
   deleteRoleQ,
   deleteEmployeeQ,
+  whichBudget,
 } = require("./modules/inquirerPrompts");
 
 // Destructures methods from Queries module to be used by app
@@ -23,6 +24,7 @@ const {
   viewEmployee,
   viewEmployeeByM,
   viewEmployeeByD,
+  viewBudgetByD,
   addDepartment,
   addRole,
   addEmployee,
@@ -58,6 +60,10 @@ const myInquirer = () => {
         await inquirer.prompt(whichDepQ).then(async (res) => {
           await viewEmployeeByD(res);
         });
+      } else if (action === "View Utilized Budget By Department") {
+        await inquirer.prompt(whichBudget).then(async (res) => {
+          await viewBudgetByD(res);
+        });
       } else if (action === "Add A Department") {
         await inquirer.prompt(addDeptQ).then(async (res) => {
           await addDepartment(res);
@@ -80,7 +86,6 @@ const myInquirer = () => {
         });
       } else if (action === "Delete A Department, Role, Or Employee") {
         await inquirer.prompt(deleteWhat).then(async (res) => {
-          console.log(res);
           if (res.table === "department") {
             await inquirer.prompt(deleteDeptQ).then(async (res) => {
               await deleteDepartment(res);

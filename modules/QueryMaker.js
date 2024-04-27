@@ -19,6 +19,9 @@ class QueryMaker {
   viewEmpByD() {
     return `SELECT e.* FROM department d JOIN role r ON d.id = r.department_id JOIN employee e ON r.id = e.role_id WHERE d.id=${this.deptId}`;
   }
+  viewBudgetByD() {
+    return `SELECT d.id AS 'Department ID', d.name AS 'Department', SUM(salary) AS 'Total Utilized Budget' FROM department d JOIN role r ON d.id = r.department_id JOIN employee e ON r.id = e.role_id WHERE d.id=${this.deptId}`;
+  }
   addItem() {
     return `INSERT INTO ${this.table} ${this.columns} VALUES ${this.values}`;
   }

@@ -22,6 +22,7 @@ const introQ = [
       "View All Employees",
       "View Employees By Manager",
       "View Employees By Department",
+      "View Utilized Budget By Department",
       "Add A Department",
       "Add A Role",
       "Add An Employee",
@@ -178,6 +179,15 @@ const deleteEmployeeQ = [
   },
 ];
 
+const whichBudget = [
+  {
+    type: "list",
+    name: "department",
+    message: "Which department's budget would you like to view?",
+    choices: deptList,
+  },
+];
+
 // Exports questions to be used by application (index.js)
 module.exports = {
   introQ,
@@ -192,4 +202,5 @@ module.exports = {
   deleteDeptQ,
   deleteRoleQ,
   deleteEmployeeQ,
+  whichBudget,
 };
