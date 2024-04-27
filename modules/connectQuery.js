@@ -183,6 +183,39 @@ class Queries {
       });
   }
 
+  // Same as above
+  async updateEmployeeManager(res) {
+    const table = "employee";
+    const managerId = `${res.manager}`;
+    const empId = `${res.employee}`;
+    const myQuery = new QueryMaker(
+      table,
+      undefined,
+      undefined,
+      role,
+      empId,
+      managerId
+    ).updateEmpRole();
+    await db.then((conn) => conn.query(myQuery));
+    await db
+      .then((data) =>
+        // Query to show the updated entry
+        data.query(
+          `SELECT e1.id, e1.first_name, e1.last_name, e2.first_name AS 'manager_first', e2.last_name AS 'manager_last' FROM employee e1 JOIN employee e2 ON e1.manager_id=e2.id WHERE e1.id=${res.employee}`
+        )
+      )
+      .then(([rows, field]) => {
+        console.log("Employee role updated!");
+        console.table(rows);
+      });
+  }
+  async employeeMList() {
+    const thisList = new GetList();
+    await thisList.createEmployeeMList(db);
+    return thisList.data;
+  }
+
+  async;
   // simply ends connection to database
   async endConnection() {
     await db.then((conn) => conn.end());

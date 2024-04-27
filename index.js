@@ -7,6 +7,7 @@ const {
   addRoleQ,
   addEmployeeQ,
   updateEmpQ,
+  updateEmpManagerQ,
 } = require("./modules/inquirerPrompts");
 
 // Destructures methods from Queries module to be used by app
@@ -18,6 +19,7 @@ const {
   addRole,
   addEmployee,
   updateEmployeeRole,
+  updateEmployeeManager,
   endConnection,
 } = new Queries();
 
@@ -52,6 +54,10 @@ const myInquirer = () => {
       } else if (action === "Update An Employee Role") {
         await inquirer.prompt(updateEmpQ).then(async (res) => {
           await updateEmployeeRole(res);
+        });
+      } else if (action === "Update An Employee's Manager") {
+        await inquirer.prompt(updateEmpManagerQ).then(async (res) => {
+          await updateEmployeeManager(res);
         });
       } else if (action === "Quit Application") {
         await endConnection();

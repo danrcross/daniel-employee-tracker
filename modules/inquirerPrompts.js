@@ -1,7 +1,13 @@
 // Import 'Queries' module; create new instance of class and destructure its methods for use in script
 const Queries = require("./connectQuery");
-const { deptList, salaryChecker, managerList, employeeList, roleList } =
-  new Queries();
+const {
+  deptList,
+  salaryChecker,
+  managerList,
+  employeeList,
+  roleList,
+  employeeMList,
+} = new Queries();
 
 // Objects made of inquirer questions.
 const introQ = [
@@ -17,6 +23,7 @@ const introQ = [
       "Add A Role",
       "Add An Employee",
       "Update An Employee Role",
+      "Update An Employee's Manager",
       "Quit Application",
     ],
   },
@@ -86,7 +93,7 @@ const updateEmpQ = [
   {
     type: "list",
     name: "employee",
-    message: "Whose role would you like to update?",
+    message: "Whose role would you like to update?\n EMPLOYEE: CURRENT ROLE",
     // Same as deptList (above)
     choices: employeeList,
   },
@@ -99,5 +106,30 @@ const updateEmpQ = [
   },
 ];
 
+const updateEmpManagerQ = [
+  {
+    type: "list",
+    name: "employee",
+    message:
+      "Whose manager would you like to update?\n EMPLOYEE: CURRENT MANAGER",
+    // Same as deptList (above)
+    choices: employeeMList,
+  },
+  {
+    type: "list",
+    name: "manager",
+    message: "Which manager would you like to assign to this employee?",
+    // Same as deptList (above)
+    choices: managerList,
+  },
+];
+
 // Exports questions to be used by application (index.js)
-module.exports = { introQ, addDeptQ, addRoleQ, addEmployeeQ, updateEmpQ };
+module.exports = {
+  introQ,
+  addDeptQ,
+  addRoleQ,
+  addEmployeeQ,
+  updateEmpQ,
+  updateEmpManagerQ,
+};

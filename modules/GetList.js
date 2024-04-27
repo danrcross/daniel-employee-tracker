@@ -90,6 +90,34 @@ class GetList {
       });
     this.data = employees;
   }
+
+  // Also works in very similar fashion to the first and second functions.
+  async createEmployeeMList(db) {
+    let employees = [];
+    await db
+      .then((conn) =>
+        conn.query(
+          "SELECT e1.id, e1.first_name, e1.last_name, e2.first_name AS 'manager_first', e2.last_name AS 'manager_last' FROM employee e1 JOIN employee e2 ON e1.manager_id=e2.id"
+        )
+      )
+      .then(([rows, fields]) => {
+        employees = rows.map((item) => {
+          // Will format the resulting table as a list items like : "First Last: Role"
+          return {
+            name:
+              item.first_name +
+              " " +
+              item.last_name +
+              ": " +
+              item.manager_first +
+              " " +
+              item.manager_last,
+            value: item.id,
+          };
+        });
+      });
+    this.data = employees;
+  }
 }
 
 // exports GetList class in order for its methods to be used by other scripts
