@@ -1,3 +1,8 @@
+-- Adds rows to company_db tables!
+-- Makes sure company_db is being used
+USE company_db;
+
+-- Adds values to department's column 'name'
 INSERT INTO
     department (name)
 VALUES
@@ -8,6 +13,7 @@ VALUES
     ('Management'),
     ('Maintenance');
 
+-- Adds values to role's columns 'title', 'salary', and 'department_id'
 INSERT INTO
     role (title, salary, department_id)
 VALUES
@@ -24,22 +30,23 @@ VALUES
     ('Network Technician', 70000.80, 6),
     ('Site Landscaper', 55000.50, 6);
 
+-- Adds values to employee's columns 'id', 'first_name', 'last_name', 'role_id', and 'manager_id'
 INSERT INTO
-    employee (id, first_name, last_name, role_id, manager_id)
+    employee (first_name, last_name, role_id, manager_id)
 VALUES
-    (1, 'Bobby', 'Frederson', 9, NULL),
-    (2, 'Janice', 'Smith', 3, 1),
-    (3, 'Freddy', 'Polis', 4, 1),
-    (4, 'Georgey', 'Trehill', 7, 1),
-    (5, 'Dexter', 'Henderson', 10, 1),
-    (6, 'Sally', 'Rhodes', 11, 5),
-    (7, 'Polly', 'McCartney', 8, 5),
-    (8, 'Jimmy', 'Rainey', 12, 5),
-    (9, 'Lewis', 'Malcolm', 6, 5),
-    (10, 'Linda', 'Quest', 5, 1),
-    (11, 'Ulga', 'Rosenberg', 1, 1),
-    (12, 'Larry', 'Costanza', 2, 1),
-    (13, 'Zainab', 'Penderecki', 4, 5),
-    (14, 'Yusef', 'Abadi', 6, 5),
-    (15, 'Rebecca', 'Fortsmyer', 8, 5),
-    (16, 'Phillip', 'Bindleschaft', 6, 5);
+    ('Bobby', 'Frederson', 9, NULL),
+    ('Janice', 'Smith', 3, 1),
+    ('Freddy', 'Polis', 4, 1),
+    ('Georgey', 'Trehill', 7, 1),
+    ('Dexter', 'Henderson', 10, 1),
+    ('Sally', 'Rhodes', 11, 5),
+    ('Polly', 'McCartney', 8, 5),
+    ('Jimmy', 'Rainey', 12, 5),
+    ('Lewis', 'Malcolm', 6, 5),
+    ('Linda', 'Quest', 5, 1),
+    ('Ulga', 'Rosenberg', 1, 1),
+    ('Larry', 'Costanza', 2, 1),
+    ('Zainab', 'Penderecki', 4, 5),
+    ('Yusef', 'Abadi', 6, 5),
+    ('Rebecca', 'Fortsmyer', 8, 5),
+    ('Phillip', 'Bindleschaft', 6, 5);
