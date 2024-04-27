@@ -192,20 +192,20 @@ class Queries {
       table,
       undefined,
       undefined,
-      role,
+      undefined,
       empId,
       managerId
-    ).updateEmpRole();
+    ).updateEmpManager();
     await db.then((conn) => conn.query(myQuery));
     await db
       .then((data) =>
         // Query to show the updated entry
         data.query(
-          `SELECT e1.id, e1.first_name, e1.last_name, e2.first_name AS 'manager_first', e2.last_name AS 'manager_last' FROM employee e1 JOIN employee e2 ON e1.manager_id=e2.id WHERE e1.id=${res.employee}`
+          `SELECT e1.id, e1.first_name, e1.last_name, e2.id AS 'manager id', e2.first_name AS 'manager_first', e2.last_name AS 'manager_last' FROM employee e1 JOIN employee e2 ON e1.manager_id=e2.id WHERE e1.id=${res.employee}`
         )
       )
       .then(([rows, field]) => {
-        console.log("Employee role updated!");
+        console.log("Employee manager updated!");
         console.table(rows);
       });
   }
