@@ -9,6 +9,7 @@ const {
   updateEmpQ,
   updateEmpManagerQ,
   whichManQ,
+  whichDepQ,
 } = require("./modules/inquirerPrompts");
 
 // Destructures methods from Queries module to be used by app
@@ -17,6 +18,7 @@ const {
   viewRole,
   viewEmployee,
   viewEmployeeByM,
+  viewEmployeeByD,
   addDepartment,
   addRole,
   addEmployee,
@@ -44,6 +46,10 @@ const myInquirer = () => {
       } else if (action === "View Employees By Manager") {
         await inquirer.prompt(whichManQ).then(async (res) => {
           await viewEmployeeByM(res);
+        });
+      } else if (action === "View Employees By Department") {
+        await inquirer.prompt(whichDepQ).then(async (res) => {
+          await viewEmployeeByD(res);
         });
       } else if (action === "Add A Department") {
         await inquirer.prompt(addDeptQ).then(async (res) => {

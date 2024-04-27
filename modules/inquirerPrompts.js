@@ -20,6 +20,7 @@ const introQ = [
       "View All Roles",
       "View All Employees",
       "View Employees By Manager",
+      "View Employees By Department",
       "Add A Department",
       "Add A Role",
       "Add An Employee",
@@ -36,6 +37,14 @@ const whichManQ = [
     name: "manager",
     message: "Which manager's employees would you like to view?",
     choices: managerList,
+  },
+];
+const whichDepQ = [
+  {
+    type: "list",
+    name: "department",
+    message: "Which department's employees would you like to view?",
+    choices: deptList,
   },
 ];
 const addDeptQ = [
@@ -142,4 +151,5 @@ module.exports = {
   updateEmpQ,
   updateEmpManagerQ,
   whichManQ,
+  whichDepQ,
 };

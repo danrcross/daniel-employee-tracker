@@ -59,6 +59,21 @@ class Queries {
       .then(([rows, fields]) => console.table(rows));
   }
 
+  async viewEmployeeByD(res) {
+    const myQuery = new QueryMaker(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      res.department
+    ).viewEmpByD();
+    await db
+      .then((conn) => conn.query(myQuery))
+      .then(([rows, fields]) => console.table(rows));
+  }
+
   // Adds department to 'department' table; 'res' parameter will take in user inquirer response as argument
   // Similar to above fn's, uses QueryMaker to produce query, then sends query to database(adds department).
   // Also gives new table item as feedback

@@ -1,8 +1,9 @@
 USE company_db;
 
 SELECT
-    *
+    e.id,
+    d.name
 FROM
-    employee
-WHERE
-    manager_id = 5
+    department d
+    JOIN role r ON d.id = r.department_id
+    JOIN employee e ON r.id = e.role_id
