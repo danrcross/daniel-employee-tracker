@@ -45,7 +45,7 @@ Download the .zip from the [repository home](https://github.com/danrcross/daniel
 
 ## Usage
 
-[Click here to view a video demonstrating both the testing and functionality of the app](https://drive.google.com/file/d/1V36ssXtAZ_3IQUC4dBPAf9ShTpTxQdKz/view?usp=sharing)
+[Click here to view a video demonstrating both the testing and functionality of the app](https://drive.google.com/file/d/1VM7g08GoGWFsGdRInqG_YQd3hCRfNrMr/view?usp=sharing)
 
 ## License
 
