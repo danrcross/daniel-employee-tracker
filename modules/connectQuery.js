@@ -29,8 +29,7 @@ class Queries {
 
   // similar to above
   async viewRole() {
-    const table = "role";
-    const myQuery = new QueryMaker(table).viewAll();
+    const myQuery = new QueryMaker().viewDept();
     await db
       .then((conn) => conn.query(myQuery))
       .then(([rows, fields]) => console.table(rows));
@@ -38,8 +37,7 @@ class Queries {
 
   // similar to above
   async viewEmployee() {
-    const table = "employee";
-    const myQuery = new QueryMaker(table).viewAll();
+    const myQuery = new QueryMaker().viewEmp();
     await db
       .then((conn) => conn.query(myQuery))
       .then(([rows, fields]) => console.table(rows));
@@ -99,7 +97,9 @@ class Queries {
     await db.then((conn) => conn.query(myQuery));
     await db
       .then((data) =>
-        data.query(`SELECT * FROM department ORDER BY id DESC LIMIT 1`)
+        data.query(
+          `SELECT id, name AS 'Department' FROM department ORDER BY id DESC LIMIT 1`
+        )
       )
       .then(([rows, field]) => {
         console.log("\nDepartments updated!");
@@ -124,7 +124,11 @@ class Queries {
     await db.then((conn) => conn.query(myQuery));
     //be more selective with table output
     await db
-      .then((data) => data.query(`SELECT * FROM role ORDER BY id DESC LIMIT 1`))
+      .then((data) =>
+        data.query(
+          `SELECT r.id, r.title AS 'Role', r.salary AS 'Salary', d.name AS 'Department' FROM role r JOIN department d ON r.department_id=d.id ORDER BY id DESC LIMIT 1`
+        )
+      )
       .then(([rows, field]) => {
         console.log("Role added!");
         console.table(rows);
@@ -186,7 +190,9 @@ class Queries {
       .then((data) =>
         // Query to show the most recent (last) entry in table:
         // Takes the table, orders it in descending order by id, and then limits table to 1 entry
-        data.query(`SELECT * FROM employee ORDER BY id DESC LIMIT 1`)
+        data.query(
+          `SELECT e1.id, CONCAT(e1.first_name,' ', e1.last_name) AS 'Employee', r.title AS 'Role', d.name AS 'Department', r.salary AS 'Salary', CONCAT(e2.first_name, ' ',e2.last_name) AS 'Manager' FROM employee e1 LEFT JOIN employee e2 ON e1.manager_id=e2.id JOIN role r ON e1.role_id=r.id JOIN department d ON r.department_id=d.id ORDER BY e1.id DESC LIMIT 1`
+        )
       )
       .then(([rows, field]) => {
         console.log("Employee added!");
